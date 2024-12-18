@@ -22,7 +22,7 @@ public class SSEController {
     }
 
 
-    @GetMapping(value ="/connectsse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/connectsse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Map<String, String>> connectSse() {
         return Flux.interval(Duration.ofSeconds(1))
                 .map(sequence -> {
@@ -30,6 +30,8 @@ public class SSEController {
                     response.put("status", "Connected");
                     response.put("message", "Toujours connecté.");
                     return response;
-                });
+                })
+                .doOnCancel(() -> System.out.println("Le client a fermé la connexion."))
+                .doFinally(signalType -> System.out.println("Fin du flux : " + signalType));
     }
 }

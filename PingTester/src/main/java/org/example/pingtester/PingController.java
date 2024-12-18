@@ -10,7 +10,7 @@ import java.net.URL;
 
 public class PingController {
 
-    Thread[] threads = new Thread[10];
+    Thread[] threads = new Thread[500];
 
     public  void start() throws InterruptedException {
         String sseUrl = "http://localhost:8080/connectsse";
