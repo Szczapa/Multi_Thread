@@ -1,22 +1,27 @@
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        Thread[] threads = new Thread[2];
+        int threadPoolSize = 2;
+        ExecutorService executor = Executors.newFixedThreadPool(threadPoolSize);
         CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
 
-        Runnable AddToList = () -> {
+        Runnable addToList = () -> {
             for (int i = 0; i <= 9; i++) {
                 list.add(String.valueOf(Thread.currentThread().getName()+"-"+"produit"+i));
             }
         };
 
-        for (int i = 0; i < threads.length; i++) {
-            threads[i] = new Thread(AddToList,"Thread"+i);
-            threads[i].start();
+        for (int i = 0; i < threadPoolSize; i++) {
+            executor.submit(addToList);
         }
 
-        for (Thread thread : threads) thread.join();
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            Thread.sleep(100);
+        }
 
         System.out.println("List Final de produit" + list);
     }
