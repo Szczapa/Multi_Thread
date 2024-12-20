@@ -27,7 +27,8 @@ public class Main {
 
     public static long TestVirtualThread() throws InterruptedException {
         long strTimer = System.currentTimeMillis();
-        var executor = Executors.newFixedThreadPool(100);
+
+        var executor = Executors.newVirtualThreadPerTaskExecutor();
 
         for (int i = 0; i < TASK_COUNTER; i++) {
             executor.submit(Main::simpleTask);
